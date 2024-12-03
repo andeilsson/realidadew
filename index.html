@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR com Objeto 3D em Superfície</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+    <a-scene embedded arjs="sourceType: webcam; detectionMode: mono_and_matrix;">
+        <a-entity camera></a-entity>
+
+        <!-- Cubo visível até que a superfície seja detectada -->
+        <a-box id="marker" position="0 0 0" scale="0.5 0.5 0.5" material="color: blue;"></a-box>
+
+        <a-entity
+            id="modelo3d"
+            gltf-model="https://raw.githubusercontent.com/andeilsson/usina/5efda34ad6f2216cf79068b2867651b8def67883/usina.glb"
+            scale="1.5 1.5 1.5"
+            position="0 0 0"  
+            rotation="0 0 0"
+            visible="false"  
+        ></a-entity>
+    </a-scene>
+
+    <script>
+        const modelo3d = document.getElementById('modelo3d');
+        const marker = document.getElementById('marker');
+
+        window.addEventListener('arjs-nft-loaded', () => {
+            modelo3d.setAttribute('visible', 'true');  // Torna o modelo visível quando a superfície é detectada
+            modelo3d.object3D.position.set(0, 0, 0);  // Posiciona o modelo na superfície
+            marker.setAttribute('visible', 'false');   // Esconde o cubo
+        });
+
+        window.addEventListener('camera-error', (error) => {
+            console.error('camera-error', error);
+        });
+    </script>
+</body>
+</html>
